@@ -1,5 +1,5 @@
-import 'dotenv/config'; // Import dotenv to load environment variables
-import { createTransport } from 'nodemailer';
+require('dotenv/config'); // Import dotenv to load environment variables
+const { createTransport } = require('nodemailer');
 
 const transporter = createTransport({
   service: 'Gmail',
@@ -49,4 +49,4 @@ const sendResetPasswordEmail = (email, resetUrl) => {
   });
 };
 
-export default { sendInviteEmail, sendResetPasswordEmail };
+module.exports = { sendInviteEmail, sendResetPasswordEmail };
