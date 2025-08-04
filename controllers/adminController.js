@@ -1,5 +1,6 @@
 const pool = require('../config/db');
 const { sendInviteEmail } = require('../services/emailService');
+const { gerarTokenConvite } = require('../utils/inviteToken');
 const Mensalidades = require('../models/Mensalidades');
 
 module.exports = {
@@ -173,7 +174,8 @@ module.exports = {
             return res.status(400).json({ error: 'E-mail é obrigatório' });
         }
         try {
-            await sendInviteEmail(email);
+            const tokenConvite = gerarTokenConvite();
+            await sendInviteEmail(email, tokenConvite);
             res.json({ success: true, message: 'Convite enviado!' });
         } catch (err) {
             console.error('Erro ao enviar convite:', err);
