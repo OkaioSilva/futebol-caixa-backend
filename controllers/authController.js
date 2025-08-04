@@ -1,7 +1,7 @@
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
 const Admin = require('../models/Admin');
-const { sendInviteEmail, sendResetPasswordEmail } = require('../services/emailService').default;
+const { sendInviteEmail, sendResetPasswordEmail } = require('../services/emailService');
 const { validationResult } = require('express-validator');
 const nodemailer = require('nodemailer');
 const { gerarTokenConvite, validarTokenConvite } = require('../utils/inviteToken');
