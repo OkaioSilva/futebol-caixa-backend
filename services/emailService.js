@@ -19,10 +19,9 @@ const sendInviteEmail = (email, tokenConvite) => {
         <h2 style="color: #2ecc71;">Convite para o Sistema de Caixa</h2>
         <p>Olá,</p>
         <p>Você foi convidado para acessar o <b>Sistema de Caixa</b> do Futebol!</p>
-        <p>Para criar sua conta, basta clicar no botão abaixo:</p>
-        <a href="${process.env.FRONTEND_URL}/registro?token=${tokenConvite}" style="display: inline-block; padding: 12px 24px; background: #2ecc71; color: #fff; border-radius: 4px; text-decoration: none; font-weight: bold; margin: 16px 0;">Criar minha conta</a>
-        <p>Se o botão não funcionar, copie e cole o link abaixo no seu navegador:</p>
-        <p style="word-break: break-all; color: #555; font-size: 0.95em;">${process.env.FRONTEND_URL}/registro?token=${tokenConvite}</p>
+        <p>Para criar sua conta, acesse o sistema normalmente e utilize o seguinte <b>Token de Convite</b>:</p>
+        <div style="background: #fff; border: 1px solid #2ecc71; border-radius: 4px; padding: 12px; margin: 16px 0; font-size: 1.2em; color: #2ecc71; text-align: center; font-weight: bold; letter-spacing: 2px;">${tokenConvite || '<b style=\'color:red\'>TOKEN NÃO GERADO</b>'}</div>
+        <p>Copie e cole esse token no campo solicitado ao criar sua conta.</p>
         <hr style="margin: 24px 0; border: none; border-top: 1px solid #eee;" />
         <p style="font-size: 0.9em; color: #888;">Se você não esperava este convite, apenas ignore este e-mail.</p>
       </div>
