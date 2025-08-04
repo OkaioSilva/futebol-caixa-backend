@@ -15,10 +15,10 @@ module.exports = {
     async atualizarPagamento(req, res) {
         const { id } = req.params;
         const { status } = req.body;
+        const dataPagamento = status === 'pago' ? new Date() : null;
         const query = `
             UPDATE mensalistas SET status_pagamento = $1, data_pagamento = $2 WHERE id = $3 RETURNING *
         `;
-        const dataPagamento = status === 'pago' ? new Date() : null;
         const { rows } = await pool.query(query, [status, dataPagamento, id]);
         const mensalista = rows[0];
         if(status === 'pago'){
