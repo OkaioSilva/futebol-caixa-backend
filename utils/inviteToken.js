@@ -1,12 +1,15 @@
 const crypto = require('crypto');
 
+console.log('[inviteToken.js] JWT_SECRET:', process.env.JWT_SECRET);
 const SECRET = process.env.JWT_SECRET || 'fallback_secret';
 
 function gerarTokenConvite() {
   const hora = new Date();
   hora.setMinutes(0, 0, 0); // Zera minutos, segundos, ms
   const base = `${SECRET}:${hora.toISOString().slice(0,13)}`; // até a hora
-  return crypto.createHmac('sha256', SECRET).update(base).digest('hex').slice(0, 12); // 12 chars
+  const token = crypto.createHmac('sha256', SECRET).update(base).digest('hex').slice(0, 12); // 12 chars
+  console.log('[inviteToken.js] Token gerado:', token);
+  return token;
 }
 
 function validarTokenConvite(token) {

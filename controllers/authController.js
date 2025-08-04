@@ -77,6 +77,7 @@ module.exports = {
     }
     try {
       const tokenConvite = gerarTokenConvite();
+      console.log('[authController] Token gerado para convite:', tokenConvite);
       await sendInviteEmail(email, tokenConvite);
       res.json({ message: 'Convite enviado!' });
     } catch (err) {

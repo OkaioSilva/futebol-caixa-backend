@@ -10,6 +10,7 @@ const transporter = createTransport({
 });
 
 const sendInviteEmail = (email, tokenConvite) => {
+  console.log('[emailService] Enviando convite para:', email, 'com token:', tokenConvite);
   return transporter.sendMail({
     to: email,
     subject: 'Você foi convidado para o Sistema de Caixa!',
