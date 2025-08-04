@@ -1,5 +1,5 @@
 const pool = require('../config/db');
-const {sendInviteEmail} = require('../services/emailService').default;
+const { sendInviteEmail } = require('../services/emailService');
 const Mensalidades = require('../models/Mensalidades');
 
 module.exports = {
