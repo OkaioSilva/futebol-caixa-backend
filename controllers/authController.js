@@ -76,6 +76,7 @@ module.exports = {
       return res.status(400).json({ error: 'E-mail inválido' });
     }
     try {
+      console.log('[authController] Função gerarTokenConvite:', gerarTokenConvite);
       const tokenConvite = gerarTokenConvite();
       console.log('[authController] Token gerado para convite:', tokenConvite);
       await sendInviteEmail(email, tokenConvite);
