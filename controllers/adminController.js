@@ -5,14 +5,14 @@ const Mensalidades = require('../models/Mensalidades');
 
 module.exports = {
     async registrarMensalista(req, res) {
-        const { nome, dias_jogo } = req.body;
+        const { nome, dias_jogo, is_dp } = req.body;
         // dias_jogo deve ser 'segunda', 'quarta' ou 'segunda e quarta'
         const dias = dias_jogo || 'segunda';
         const nomeExibicao = `${nome} (${dias})`;
         const query = `
-            INSERT INTO mensalistas (nome, status_pagamento, dias_jogo) VALUES ($1, 'pendente', $2) RETURNING *
+            INSERT INTO mensalistas (nome, status_pagamento, dias_jogo, is_dp) VALUES ($1, 'pendente', $2, $3) RETURNING *
         `;
-        const { rows } = await pool.query(query, [nomeExibicao, dias]);
+        const { rows } = await pool.query(query, [nomeExibicao, dias, !!is_dp]);
         res.status(201).json(rows[0])
     },
 
@@ -25,7 +25,7 @@ module.exports = {
         `;
         const { rows } = await pool.query(query, [status, dataPagamento, id]);
         const mensalista = rows[0];
-        if(status === 'pago'){
+        if(status === 'pago' && !mensalista.is_dp){
             // Buscar nome do admin
             const adminResult = await pool.query('SELECT nome FROM admins WHERE id = $1', [req.adminId]);
             const adminNome = adminResult.rows[0]?.nome || 'Admin';
@@ -78,9 +78,7 @@ module.exports = {
     ,
     async listarMensalistas(req, res) {
         const { rows } = await pool.query(`
-            SELECT id, nome, 
-            status_pagamento as status,
-            data_pagamento as "dataPagamento"
+            SELECT id, nome, status_pagamento as status, data_pagamento as "dataPagamento", dias_jogo, is_dp
             FROM mensalistas
             ORDER BY nome`);
         res.json(rows);
