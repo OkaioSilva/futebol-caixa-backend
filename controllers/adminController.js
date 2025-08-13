@@ -5,11 +5,14 @@ const Mensalidades = require('../models/Mensalidades');
 
 module.exports = {
     async registrarMensalista(req, res) {
-        const { nome } = req.body;
+        const { nome, dias_jogo } = req.body;
+        // dias_jogo deve ser 'segunda', 'quarta' ou 'segunda e quarta'
+        const dias = dias_jogo || 'segunda';
+        const nomeExibicao = `${nome} (${dias})`;
         const query = `
-            INSERT INTO mensalistas (nome, status_pagamento) VALUES ($1, 'pendente') RETURNING *
+            INSERT INTO mensalistas (nome, status_pagamento, dias_jogo) VALUES ($1, 'pendente', $2) RETURNING *
         `;
-        const { rows } = await pool.query(query, [nome]);
+        const { rows } = await pool.query(query, [nomeExibicao, dias]);
         res.status(201).json(rows[0])
     },
 
@@ -26,9 +29,12 @@ module.exports = {
             // Buscar nome do admin
             const adminResult = await pool.query('SELECT nome FROM admins WHERE id = $1', [req.adminId]);
             const adminNome = adminResult.rows[0]?.nome || 'Admin';
+            // Valor proporcional ao número de dias
+            let valor = 20;
+            if (mensalista.dias_jogo && mensalista.dias_jogo.includes('e')) valor = 40;
             await pool.query(
                 `INSERT INTO caixa (tipo, valor, descricao, admin_id) VALUES ($1, $2, $3, $4)`, 
-                ['entrada', 30, `Pagamento mensalista: ${mensalista.nome} (registrado por ${adminNome})`, req.adminId]
+                ['entrada', valor, `Pagamento mensalista: ${mensalista.nome} (registrado por ${adminNome})`, req.adminId]
             );
         }
         res.json(mensalista);
